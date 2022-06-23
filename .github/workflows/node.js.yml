@@ -8,10 +8,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,7 +21,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-  
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -32,8 +29,6 @@ jobs:
         cache-dependency-path: app/package-lock.json
     - run: npm install -g mocha
     - run: npm install
-#     - run: npm run test
-
     - name: zip creation
       uses: thedoctor0/zip-release@main
       with:
@@ -43,24 +38,32 @@ jobs:
         exclusions: '*.git* /*node_modules/* .editorconfig'
     - run: ls
     - run: pwd
-  
     - name: 'Task 1: Connect to AWS '
-
       uses: aws-actions/configure-aws-credentials@v1
-
       with:
-
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-        aws-region: us-east-1
-
-        
-
+        aws-region: ${{ secrets.AWS_REGION }}
     - name: 'Task 2: Upload  to S3 bucket'
-
       run: aws s3 cp app.zip s3://githubaction-nodejs-app
-   
-   
+  test:
+     needs: build
+     runs-on: ubuntu-latest
+     steps:
+     - name: 'Testing '
+     - run : echo 'testing'
+#      - run : npm run test
+  deploy: 
+     needs: build
+     runs-on: ubuntu-latest
+     steps:
+     - name: Configure AWS Credentials
+       uses: aws-actions/configure-aws-credentials@v1
+       with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws-region: ${{ secrets.AWS_REGION }}
+     - name: Deploy to AWS
+       run: 
+         aws deploy create-deployment --application-name github-nodejs-app --deployment-group-name DG1 --s3-location bucket=githubaction-nodejs-app,key=app.zip,bundleType=zip
  
