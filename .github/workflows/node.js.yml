@@ -1,6 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
+#SECRETS NAME : AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION
 name: Node.js CI
 
 on:
@@ -9,7 +7,7 @@ on:
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
-env:
+env:  #SET ENVIROMENT VARIABLES
     APPLICATION_NAME: 'github-nodejs-app'
     DEPLOYMENT_GROUP: 'DG1'
     BUCKET_NAME: 'githubaction-nodejs-app'
@@ -19,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./app
+        working-directory: ./app #CHANGE WORKING DIRECTORY
     strategy:
       matrix:
         node-version: [16.x]
@@ -35,6 +33,7 @@ jobs:
         cache-dependency-path: app/package-lock.json
     - run: npm install -g mocha
     - run: npm install
+    #CREATING ZIP FILE
     - name: zip creation
       uses: thedoctor0/zip-release@main
       with:
@@ -43,16 +42,15 @@ jobs:
         directory: app/
         exclusions: '*.git* /*node_modules/* .editorconfig'
     - run: ls
-    - run: pwd
     - name: 'Task 1: Connect to AWS '
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-        
     - name: 'Task 2: Upload  to S3 bucket'
       run: aws s3 cp app.zip s3://githubaction-nodejs-app
+      #TESTING
     - name: 'Testing '
       run : echo 'testing'
 #     - run : npm run test
