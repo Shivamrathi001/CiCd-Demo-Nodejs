@@ -49,7 +49,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
     - name: 'Task 2: Upload  to S3 bucket'
-      run: aws s3 cp app.zip s3://githubaction-nodejs-app
+      run: aws s3 cp ${{env.FILE_NAME}}.zip s3://${{env.BUCKET_NAME}}
       #TESTING
     - name: 'Testing '
       run : echo 'testing'
