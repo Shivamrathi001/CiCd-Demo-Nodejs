@@ -8,6 +8,12 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
+env:
+    APPLICATION_NAME: 'github-nodejs-app'
+    DEPLOYMENT_GROUP: 'DG1'
+    BUCKET_NAME: 'githubaction-nodejs-app'
+    FILE_NAME: 'app'
 jobs:
   buildAndTest:
     runs-on: ubuntu-latest
@@ -62,5 +68,5 @@ jobs:
          aws-region: ${{ secrets.AWS_REGION }}
      - name: Deploy to AWS
        run: 
-         aws deploy create-deployment --application-name github-nodejs-app --deployment-group-name DG1 --s3-location bucket=githubaction-nodejs-app,key=app.zip,bundleType=zip
+         aws deploy create-deployment --application-name ${{env.APPLICATION_NAME}} --deployment-group-name ${{env.DEPLOYMENT_GROUP}} --s3-location bucket=${{env.BUCKET_NAME}},key=${{env.FILE_NAME}}.zip,bundleType=zip
  
