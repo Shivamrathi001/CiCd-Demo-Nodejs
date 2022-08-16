@@ -47,7 +47,10 @@ pipeline {
     }
     post {
         always {
-            echo 'Stage is success'
+	 withAWS(region:'us-east-1',credentials:'aws') {
+	  createDeployment( s3Bucket : 'cicd-demo-jenkins', applicationName : 'cicd-demo', deploymentGroupName : 'DG1', s3Key : 'app.zip', s3BundleType : 'zip')	       
+         }
+         echo 'Stage is success'
         }
     }
 }
