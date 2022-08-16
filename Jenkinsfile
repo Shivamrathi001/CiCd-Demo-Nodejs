@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    tools {nodejs "node"}
+    tools {NodeJS "NodeJS"}
     stages {
         stage('verifying tools') {
             steps {
@@ -34,7 +34,7 @@ pipeline {
                 ls
                 '''
                withAWS(region:'us-east-1',credentials:'aws') {
-                s3Upload(file:'/var/lib/jenkins/workspace/java-demo-pipeline/app.zip', bucket:'jenkins-test-javaupload')
+                s3Upload(file:'/var/lib/jenkins/workspace/CiCd-demo-nodejs/app/app.zip', bucket:'cicd-demo-jenkins')
 //           sh '
 //           aws s3 cp ./target/demo-0.0.1-SNAPSHOT.jar s3://jenkins-test-javaupload/demo-0.0.1-SNAPSHOT.jar '
                 }
