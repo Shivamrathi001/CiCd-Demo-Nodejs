@@ -35,7 +35,7 @@ pipeline {
                 '''
                withAWS(region:'us-east-1',credentials:'aws') {
                 s3Upload(file:'/var/lib/jenkins/workspace/CiCd-demo-nodejs/app/app.zip', bucket:'cicd-demo-jenkins')
-		createDeployment( s3Bucket : 'cicd-demo-jenkins', applicationName : 'cicd-demo', deploymentGroupName : 'DG1')
+		createDeployment( s3Bucket : 'cicd-demo-jenkins', applicationName : 'cicd-demo', deploymentGroupName : 'DG1', Bucket : 'cicd-demo-jenkins', Key : 'app', BundleType : 'zip')
 // 		aws deploy create-deployment --application-name  --deployment-group-name  --deployment-config-name CodeDeployDefault.AllAtOnce --s3-location bucket=,bundleType=zip,key='app'.zip
 //           sh '
 //           aws s3 cp ./target/demo-0.0.1-SNAPSHOT.jar s3://jenkins-test-javaupload/demo-0.0.1-SNAPSHOT.jar '
