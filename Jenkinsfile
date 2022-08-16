@@ -35,10 +35,12 @@ pipeline {
                 '''
                withAWS(region:'us-east-1',credentials:'aws') {
                 s3Upload(file:'/var/lib/jenkins/workspace/CiCd-demo-nodejs/app/app.zip', bucket:'cicd-demo-jenkins')
+		aws deploy create-deployment --application-name 'cicd-demo' --deployment-group-name 'DG1' --deployment-config-name CodeDeployDefault.AllAtOnce --s3-location bucket='cicd-demo-jenkins',bundleType=zip,key='app'.zip
 //           sh '
 //           aws s3 cp ./target/demo-0.0.1-SNAPSHOT.jar s3://jenkins-test-javaupload/demo-0.0.1-SNAPSHOT.jar '
+		       
                 }
-		aws deploy create-deployment --application-name 'cicd-demo' --deployment-group-name 'DG1' --s3-location 'cicd-demo-jenkins' key='app.zip' bundleType=zip
+	    		
             }
         }
     }
