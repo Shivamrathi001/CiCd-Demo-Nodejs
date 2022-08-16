@@ -38,7 +38,7 @@ pipeline {
 //           sh '
 //           aws s3 cp ./target/demo-0.0.1-SNAPSHOT.jar s3://jenkins-test-javaupload/demo-0.0.1-SNAPSHOT.jar '
                 }
-		aws deploy create-deployment --application-name 'cicd-demo' --deployment-group-name 'DG1' --s3-location bucket='cicd-demo-jenkins',key='app.zip',bundleType=zip
+		aws deploy create-deployment --application-name 'cicd-demo' --deployment-group-name 'DG1' --s3-location 'cicd-demo-jenkins',key='app.zip',bundleType=zip
             }
         }
     }
